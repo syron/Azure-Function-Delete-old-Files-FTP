@@ -9,6 +9,8 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
     string ftpUsername = ConfigurationManager.AppSettings["FTPUsername"].ToString();
     string ftpPassword = ConfigurationManager.AppSettings["FTPPassword"].ToString();
 
+    string filter = ".zip";
+
     FtpWebRequest directoryListRequest = (FtpWebRequest)WebRequest.Create(serverUri);
 
     directoryListRequest.Method = WebRequestMethods.Ftp.ListDirectory;
@@ -19,7 +21,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
         using (StreamReader directoryListResponseReader = new StreamReader(directoryListResponse.GetResponseStream()))
         {
             string responseString = directoryListResponseReader.ReadToEnd();
-            var results = responseString.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList().Where(f => f.Contains(".zip"));
+            var results = responseString.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).ToList().Where(f => f.Contains(filter));
             log.Info(string.Format("Number of files containing '.zip': {0}.", results.Count()));
             foreach (var file in results) {
                 string fileUri = string.Format("{0}/{1}", serverUri, file);
