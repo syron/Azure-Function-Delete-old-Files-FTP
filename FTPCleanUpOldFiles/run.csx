@@ -10,7 +10,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
     string ftpPassword = ConfigurationManager.AppSettings["FTPPassword"].ToString();
 
     string filter = ".zip";
-    string numberOfDays = -3;
+    int numberOfDays = -3;
 
     FtpWebRequest directoryListRequest = (FtpWebRequest)WebRequest.Create(serverUri);
 
