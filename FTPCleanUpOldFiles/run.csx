@@ -10,6 +10,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
     string ftpPassword = ConfigurationManager.AppSettings["FTPPassword"].ToString();
 
     string filter = ".zip";
+    string numberOfDays = -3;
 
     FtpWebRequest directoryListRequest = (FtpWebRequest)WebRequest.Create(serverUri);
 
@@ -27,7 +28,7 @@ public static void Run(TimerInfo myTimer, TraceWriter log)
                 string fileUri = string.Format("{0}/{1}", serverUri, file);
                 DateTime lastModified = GetDateTimestampOnServer(fileUri, ftpUsername, ftpPassword);
 
-                if (lastModified < DateTime.Now.AddDays(-3)) {
+                if (lastModified < DateTime.Now.AddDays(numberOfDays)) {
                     log.Info(string.Format("File '{0}' will be deleted.", file));
                     
                     try {
